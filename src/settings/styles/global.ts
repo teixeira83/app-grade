@@ -6,4 +6,9 @@ const globalStyles = StyleSheet.create({
   },
 });
 
-export { globalStyles };
+const colors = {
+  primary: '#c9c9c9',
+  secondary: '#ffffff',
+};
+
+export { globalStyles, colors };

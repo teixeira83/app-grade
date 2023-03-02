@@ -2,4 +2,8 @@ interface IDropDown {
   title: string;
 }
 
-export { IDropDown };
+interface IContentCard {
+  index: number;
+}
+
+export { IDropDown, IContentCard };
