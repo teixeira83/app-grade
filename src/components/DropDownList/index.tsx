@@ -1,16 +1,26 @@
 import React from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { cursosMock } from '../../mocks';
+import { DropDown } from './components/DropDown';
+import { ICourse } from '../../types/course';
 
 export function DropDownList(): JSX.Element {
   return (
     <View>
-      <Text>Seus Cursos</Text>
+      <Text style={styles.titleText}>SEUS CURSOS</Text>
 
       <FlatList
-        data={cursosMock}
-        renderItem={({ item }) => <Text key={item.id}>{item.title}</Text>}
+        data={cursosMock as ICourse[]}
+        renderItem={({ item }) => <DropDown key={item.id} title={item.title} />}
       />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  titleText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginVertical: 20,
+  },
+});
