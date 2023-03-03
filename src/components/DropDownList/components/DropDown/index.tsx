@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { IContentCard, IDropDown } from '../../../../types/components/dropDown';
 import { ListItem } from '@rneui/themed';
 import { colors } from '../../../../settings/styles/global';
@@ -9,9 +9,9 @@ export function DropDown({ title }: IDropDown): JSX.Element {
 
   const ContentCard = ({ index }: IContentCard): JSX.Element => {
     return (
-      <View style={styles.contentCardContainer}>
+      <TouchableOpacity style={styles.cardContainer}>
         <Text>{`${index + 1} Período`}</Text>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -42,7 +42,12 @@ const styles = StyleSheet.create({
     borderColor: '#333333',
     borderWidth: 1,
   },
-  contentCardContainer: {
+  cardContainer: {
     backgroundColor: colors.secondary,
+    marginBottom: 14,
+    height: 34,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
   },
 });

@@ -10,6 +10,9 @@ export function DropDownList(): JSX.Element {
       <Text style={styles.titleText}>SEUS CURSOS</Text>
 
       <FlatList
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 120 }}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
         data={cursosMock as ICourse[]}
         renderItem={({ item }) => <DropDown key={item.id} title={item.title} />}
       />
