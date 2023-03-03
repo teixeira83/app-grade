@@ -6,6 +6,8 @@ import { globalStyles } from '../../settings/styles/global';
 export function Home(): JSX.Element {
   return (
     <View style={globalStyles.bodyContainer}>
+      <Text>Incluir Search</Text>
+
       <DropDownList />
     </View>
   );
