@@ -1,6 +1,25 @@
-interface ICourse {
+interface Subject {
   id: string;
-  title: string;
+  description: string;
 }
 
-export { ICourse };
+interface CourseClass {
+  startHour: string;
+  subject: Subject;
+}
+
+interface WeekDays {
+  monday: CourseClass[];
+  tuesday: CourseClass[];
+  wednesday: CourseClass[];
+  thursday: CourseClass[];
+  friday: CourseClass[];
+}
+
+interface Course {
+  id: string;
+  name: string;
+  periods: WeekDays[];
+}
+
+export { Course, WeekDays, CourseClass };
