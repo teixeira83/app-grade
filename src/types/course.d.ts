@@ -1,6 +1,16 @@
+interface Teacher {
+  name: string;
+  contacts: {
+    whatsapp: string;
+    email: string;
+  };
+}
+
 interface Subject {
   id: string;
   description: string;
+  teacher: Teacher;
+  classroom: string;
 }
 
 interface CourseClass {
@@ -22,4 +32,4 @@ interface Course {
   periods: WeekDays[];
 }
 
-export { Course, WeekDays, CourseClass };
+export { Course, WeekDays, CourseClass, Subject };

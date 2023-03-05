@@ -1,4 +1,4 @@
-import { WeekDays } from '../course';
+import { Subject, WeekDays } from '../course';
 
 interface IWeekScheduleNavigation {
   weekScheeduleScreenTitle: string;
@@ -8,6 +8,7 @@ interface IWeekScheduleNavigation {
 type IRoutes = {
   Home: undefined;
   WeekSchedule: IWeekScheduleNavigation | undefined;
+  CourseClassDescription: Subject | undefined;
 };
 
 export { IRoutes };

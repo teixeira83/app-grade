@@ -2,13 +2,16 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 // import { useLanguage } from '../../hooks';
 import { DropDownList } from '../../components';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { IRoutes } from '../../types/routes';
 import { ContentContainer, IWeekCard } from '../../types/components/dropDown';
-import { WeekDays } from '../../types/course';
+import { CourseClass, WeekDays } from '../../types/course';
 import { colors, globalStyles } from '../../settings/styles/global';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export function WeekSchedule(): JSX.Element {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<IRoutes, 'WeekSchedule'>>();
   const { params } = useRoute<RouteProp<IRoutes, 'WeekSchedule'>>();
 
   // const { language } = useLanguage();
@@ -41,15 +44,16 @@ export function WeekSchedule(): JSX.Element {
     'friday',
   ];
 
-  const onNavigateToSubject = () => {
-    console.log('131231');
+  const onNavigateToSubject = (obj: CourseClass) => {
+    console.log('131231: ', obj);
+    navigation.navigate('CourseClassDescription', obj.subject);
   };
 
   const WeekDayCard = ({ courseClass }: IWeekCard): JSX.Element => {
     return (
       <TouchableOpacity
         style={styles.weekDayContainer}
-        onPress={() => onNavigateToSubject()}>
+        onPress={() => onNavigateToSubject(courseClass)}>
         <View style={styles.startHourContainer}>
           <Text>{courseClass.startHour}</Text>
         </View>

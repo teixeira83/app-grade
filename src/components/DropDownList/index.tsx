@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import {
   ContentContainer,
@@ -19,8 +19,9 @@ export function DropDownList({
         containerStyle={styles.container}
         content={<Text>{title}</Text>}
         isExpanded={expanded}
-        onPress={() => setExpanded(!expanded)}>
-        {contents.map(container => container)}
+        onPress={() => setExpanded(!expanded)}
+      >
+        {contents.map((container) => container)}
       </ListItem.Accordion>
     );
   };
