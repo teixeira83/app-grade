@@ -19,13 +19,12 @@ export function DropDownList({
         containerStyle={styles.container}
         content={<Text>{title}</Text>}
         isExpanded={expanded}
-        onPress={() => setExpanded(!expanded)}
-      >
-        {contents.map((container) => container)}
+        onPress={() => setExpanded(!expanded)}>
+        {contents.map(container => container)}
       </ListItem.Accordion>
     );
   };
-  // useEffect(() => console.log(containers));
+
   return (
     <View>
       <Text style={styles.titleText}>{title}</Text>

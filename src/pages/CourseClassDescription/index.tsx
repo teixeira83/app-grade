@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { IRoutes } from '../../types/routes';
@@ -13,14 +13,12 @@ export function CourseClassDescription(): JSX.Element {
       NativeStackNavigationProp<IRoutes, 'CourseClassDescription'>
     >();
   const { params } = useRoute<RouteProp<IRoutes, 'CourseClassDescription'>>();
-  useEffect(() => console.log(params));
 
   return (
     <View>
       <Header
-        canGoBack
         title={params?.description}
-        onPress={() => navigation.goBack()}
+        onGoBack={() => navigation.goBack()}
       />
 
       <View style={globalStyles.bodyContainer}>

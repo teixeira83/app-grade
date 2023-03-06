@@ -1,7 +1,8 @@
 interface IHeader {
-  canGoBack?: boolean;
   title?: string;
-  onPress?: () => void;
+  onGoBack?: () => void;
+  valueToSearch?: string;
+  onSearch?: (value) => void;
 }
 
 export { IHeader };

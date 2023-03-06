@@ -5,8 +5,7 @@ interface IWeekCard {
 }
 
 interface IPeriodCard {
-  weekScheeduleScreenTitle: string;
-  description: string;
+  periodLabelText: string;
   selectedPeriod: WeekDays;
 }
 

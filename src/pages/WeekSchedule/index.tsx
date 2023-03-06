@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 // import { useLanguage } from '../../hooks';
-import { DropDownList } from '../../components';
+import { DropDownList, Header } from '../../components';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { IRoutes } from '../../types/routes';
 import { ContentContainer, IWeekCard } from '../../types/components/dropDown';
@@ -45,7 +45,6 @@ export function WeekSchedule(): JSX.Element {
   ];
 
   const onNavigateToSubject = (obj: CourseClass) => {
-    console.log('131231: ', obj);
     navigation.navigate('CourseClassDescription', obj.subject);
   };
 
@@ -83,14 +82,21 @@ export function WeekSchedule(): JSX.Element {
   };
 
   return (
-    <View style={globalStyles.bodyContainer}>
-      {!!params && params.selectedPeriod && (
-        <DropDownList
-          title={params.weekScheeduleScreenTitle}
-          containers={extractFormattedContainers(params.selectedPeriod)}
-        />
-      )}
-    </View>
+    <>
+      <Header
+        title={'Sistemas da Informação'}
+        onGoBack={() => navigation.goBack()}
+      />
+
+      <View style={globalStyles.bodyContainer}>
+        {!!params && params.selectedPeriod && (
+          <DropDownList
+            title={params.weekScheeduleScreenTitle}
+            containers={extractFormattedContainers(params.selectedPeriod)}
+          />
+        )}
+      </View>
+    </>
   );
 }
 

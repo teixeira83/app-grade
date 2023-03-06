@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { DropDownList } from '../../components';
+import { DropDownList, Header } from '../../components';
 import { colors, globalStyles } from '../../settings/styles/global';
 import { cursosMock } from '../../mocks';
 import { useNavigation } from '@react-navigation/native';
@@ -10,6 +10,8 @@ import { ContentContainer, IPeriodCard } from '../../types/components/dropDown';
 import { Course, WeekDays } from '../../types/course';
 
 export function Home(): JSX.Element {
+  const [valueToSearch, setValueToSearch] = useState('');
+
   const navigation =
     useNavigation<NativeStackNavigationProp<IRoutes, 'Home'>>();
 
@@ -24,17 +26,16 @@ export function Home(): JSX.Element {
   };
 
   const PeriodCard = ({
-    description,
-    weekScheeduleScreenTitle,
+    periodLabelText,
     selectedPeriod,
   }: IPeriodCard): JSX.Element => {
     return (
       <TouchableOpacity
         style={styles.periodContainer}
         onPress={() =>
-          onNavigateToWeekScheedule(weekScheeduleScreenTitle, selectedPeriod)
+          onNavigateToWeekScheedule(periodLabelText, selectedPeriod)
         }>
-        <Text>{description}</Text>
+        <Text>{periodLabelText}</Text>
       </TouchableOpacity>
     );
   };
@@ -50,15 +51,12 @@ export function Home(): JSX.Element {
          * @TODO
          * trocar string "Período" por variável de internacionalização
          */
-        const weekScheeduleScreenTitle = `${course.name} - ${
-          index + 1
-        }º Período`;
-        const periodDescriptionTitle = `${index + 1} Período`;
+        const periodLabelText = `${index + 1}º  Período`;
+
         return (
           <PeriodCard
             key={`${course.id}${course.name}${index}`}
-            description={periodDescriptionTitle}
-            weekScheeduleScreenTitle={weekScheeduleScreenTitle}
+            periodLabelText={periodLabelText}
             selectedPeriod={course.periods[index]}
           />
         );
@@ -67,14 +65,19 @@ export function Home(): JSX.Element {
   };
 
   return (
-    <View style={globalStyles.bodyContainer}>
-      <Text>Incluir Search</Text>
-
-      <DropDownList
-        title="SEUS CURSOS"
-        containers={extractFormattedContainers(cursosMock)}
+    <>
+      <Header
+        valueToSearch={valueToSearch}
+        onSearch={a => setValueToSearch(a)}
       />
-    </View>
+
+      <View style={globalStyles.bodyContainer}>
+        <DropDownList
+          title="SEUS CURSOS"
+          containers={extractFormattedContainers(cursosMock)}
+        />
+      </View>
+    </>
   );
 }
 

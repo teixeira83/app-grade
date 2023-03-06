@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 const globalStyles = StyleSheet.create({
   bodyContainer: {
-    padding: 24,
+    paddingHorizontal: 24,
   },
 });
 
