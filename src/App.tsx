@@ -1,8 +1,13 @@
 import React from 'react';
 import { Routes } from './routes';
+import { AppProviders } from './contexts/providers';
 
 function App(): JSX.Element {
-  return <Routes />;
+  return (
+    <AppProviders>
+      <Routes />
+    </AppProviders>
+  );
 }
 
 export default App;

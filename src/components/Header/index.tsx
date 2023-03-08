@@ -2,14 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { IHeader } from '../../types/components/header';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { SearchInputWithIcon } from '../SearchInputWithIcon';
 
-export function Header({
-  title,
-  onGoBack,
-  valueToSearch,
-  onSearch,
-}: IHeader): JSX.Element {
+export function Header({ title, onGoBack }: IHeader): JSX.Element {
   return (
     <>
       {!!onGoBack && (
@@ -21,15 +15,6 @@ export function Header({
           <View style={styles.titleContainer}>
             <Text style={styles.titleText}>{title}</Text>
           </View>
-        </View>
-      )}
-
-      {!!onSearch && (
-        <View style={styles.container}>
-          <SearchInputWithIcon
-            value={valueToSearch ? valueToSearch : ''}
-            onSearch={onSearch}
-          />
         </View>
       )}
     </>
