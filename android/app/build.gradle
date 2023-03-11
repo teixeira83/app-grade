@@ -168,4 +168,8 @@ dependencies {
     }
 }
 
+project.ext.react = [
+    nodeExecutableAndArgs: ["node", "--max_old_space_size=8192"]
+]
+
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
