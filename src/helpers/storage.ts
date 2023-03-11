@@ -8,7 +8,7 @@ class Storage {
     this.key = key;
   }
 
-  async set(value: string) {
+  async set(value: any) {
     try {
       if (!value) return;
       await AsyncStorage.setItem(this.key, JSON.stringify(value));

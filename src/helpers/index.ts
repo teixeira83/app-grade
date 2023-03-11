@@ -1,2 +1,2 @@
 export { Storage } from './storage';
-export { CourseStorage } from './courseStorage';
+export { CoursesStorage } from './coursesStorage';

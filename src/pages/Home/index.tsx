@@ -1,37 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { DropDownList, SearchInputWithIcon } from '../../components';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
+import {
+  DropDownList,
+  SearchInputWithIcon,
+  NoCourseToShow,
+} from '../../components';
 import { colors, globalStyles } from '../../settings/styles/global';
-import { cursosMock } from '../../mocks';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { IRoutes } from '../../types/routes';
 import { ContentContainer, IPeriodCard } from '../../types/components/dropDown';
 import { Course, WeekDays } from '../../types/course';
 import { useContextCourses } from '../../contexts';
-
-const mockCursos = [
-  {
-    name: 'Engenharia da Computação',
-    id: '2198362198712',
-  },
-  {
-    name: 'Engenharia de Alimentos',
-    id: '2198362198712',
-  },
-  { name: 'Música', id: '021931269872' },
-  { name: 'Letras', id: '9821318726218' },
-];
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export function Home(): JSX.Element {
-  const { userCourses } = useContextCourses();
+  const { userCourses, allCourses, addCourse, removeCourse, isUserCourse } =
+    useContextCourses();
   const [valueToSearch, setValueToSearch] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<IRoutes, 'Home'>>();
 
   const onSearch = (text: string) => {
+    setFilteredCourses(() =>
+      allCourses.filter(course =>
+        course.name.toLowerCase().includes(text.toLowerCase()),
+      ),
+    );
     setIsSearching(true);
     setValueToSearch(text);
     if (!text) {
@@ -47,6 +54,14 @@ export function Home(): JSX.Element {
       weekScheeduleScreenTitle,
       selectedPeriod,
     });
+  };
+
+  const onSelectCourse = (course: Course) => {
+    if (!isUserCourse(course)) {
+      addCourse(course);
+    } else {
+      removeCourse(course);
+    }
   };
 
   const PeriodCard = ({
@@ -88,50 +103,77 @@ export function Home(): JSX.Element {
     }));
   };
 
+  const onBlurOnInputSearch = () => {
+    setValueToSearch('');
+    setIsSearching(false);
+  };
+
   useEffect(() => {
     console.log(userCourses);
   }, [userCourses]);
 
   return (
-    <>
-      <View style={styles.searchContainer}>
-        <SearchInputWithIcon
-          value={valueToSearch ? valueToSearch : ''}
-          onSearch={onSearch}
-          isOpen={!!valueToSearch.length}
-        />
-        {isSearching &&
-          mockCursos.map((curso, index) => {
-            return (
-              <>
-                <View style={styles.lineSeparator} />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={{ flex: 1 }}>
+          <View style={styles.searchContainer}>
+            <SearchInputWithIcon
+              value={valueToSearch ? valueToSearch : ''}
+              onSearch={onSearch}
+              isOpen={!!valueToSearch.length}
+              onBlur={onBlurOnInputSearch}
+            />
 
-                <View
-                  style={
-                    index + 1 === mockCursos.length
-                      ? styles.searchContainerXptoUltimo
-                      : styles.searchContainerXpto
-                  }>
-                  <Text>{curso.name}</Text>
-                </View>
-              </>
-            );
-          })}
-      </View>
+            {isSearching &&
+              filteredCourses.map((course, index) => {
+                return (
+                  <TouchableOpacity
+                    key={course.id}
+                    style={{ margin: 0, width: '100%' }}
+                    onPress={() => onSelectCourse(course)}>
+                    <View style={styles.lineSeparator} />
 
-      {!isSearching && (
-        <View style={globalStyles.bodyContainer}>
-          <DropDownList
-            title="SEUS CURSOS"
-            containers={extractFormattedContainers(userCourses)}
-          />
+                    <View
+                      style={
+                        index + 1 === filteredCourses.length
+                          ? styles.lastSearchContentContainer
+                          : styles.searchContentContainer
+                      }>
+                      <Text>{course.name}</Text>
+
+                      {isUserCourse(course.id) ? (
+                        <Icon name="star" size={32} color="#E4C676" />
+                      ) : (
+                        <Icon name="star-outline" size={32} />
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+          </View>
+
+          {!isSearching && !!userCourses.length && (
+            <View style={globalStyles.bodyContainer}>
+              <DropDownList
+                title="SEUS CURSOS"
+                containers={extractFormattedContainers(userCourses)}
+              />
+            </View>
+          )}
+
+          {!isSearching && !userCourses.length && <NoCourseToShow />}
         </View>
-      )}
-    </>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   periodContainer: {
     backgroundColor: colors.secondary,
     marginBottom: 14,
@@ -148,19 +190,23 @@ const styles = StyleSheet.create({
     padding: 24,
     marginTop: 12,
   },
-  searchContainerXpto: {
+  searchContentContainer: {
     backgroundColor: colors.secondary,
     width: '100%',
     height: 40,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: 24,
+    flexDirection: 'row',
   },
-  searchContainerXptoUltimo: {
+  lastSearchContentContainer: {
     backgroundColor: colors.secondary,
     width: '100%',
     height: 40,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: 24,
+    flexDirection: 'row',
     borderBottomRightRadius: 8,
     borderBottomLeftRadius: 8,
   },

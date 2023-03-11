@@ -13,6 +13,7 @@ export function SearchInputWithIcon({
   value,
   onSearch,
   isOpen,
+  onBlur,
 }: ISearchInputWithIcon): JSX.Element {
   return (
     <View style={!isOpen ? styles.container : styles.containerOpened}>
@@ -26,6 +27,7 @@ export function SearchInputWithIcon({
         placeholder="Buscar cursos"
         value={value}
         onChangeText={text => onSearch(text)}
+        onBlur={onBlur}
       />
     </View>
   );
