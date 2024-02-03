@@ -10,51 +10,56 @@ import { ISearchInputWithIcon } from '../../types/components/searchInputWithIcon
  * @constructor
  */
 export function SearchInputWithIcon({
-  value,
-  onSearch,
-  isOpen,
-  onBlur,
+    value,
+    onSearch,
+    isOpen,
+    onBlur,
+    onFocus
 }: ISearchInputWithIcon): JSX.Element {
-  return (
-    <View style={!isOpen ? styles.container : styles.containerOpened}>
-      <Icon name="search" size={22} />
+    return (
+        <View
+            style={!isOpen ? styles.container : styles.containerOpened}
+        >
+            <Icon name="search" size={22} />
 
-      <TextInput
-        style={styles.input}
-        /*@TODO
-         ** Colocar o placeholder com internacionalização
-         */
-        placeholder="Buscar cursos"
-        value={value}
-        onChangeText={text => onSearch(text)}
-        onBlur={onBlur}
-      />
-    </View>
-  );
+            <TextInput
+                style={styles.input}
+                /*@TODO
+                 ** Colocar o placeholder com internacionalização
+                 */
+                placeholder="Buscar cursos"
+                value={value}
+                onChangeText={text => onSearch(text)}
+                onBlur={onBlur}
+                onFocus={onFocus}
+            />
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    width: '100%',
-    height: 44,
-    alignItems: 'center',
-    paddingHorizontal: 14,
-  },
-  input: {
-    color: '#333',
-  },
-  containerOpened: {
-    flexDirection: 'row',
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    width: '100%',
-    height: 44,
-    alignItems: 'center',
-    paddingHorizontal: 14,
-  },
+    container: {
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        width: '100%',
+        height: 44,
+        alignItems: 'center',
+        paddingHorizontal: 14,
+    },
+    input: {
+        color: '#333',
+        width: '100%',
+    },
+    containerOpened: {
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0,
+        width: '100%',
+        height: 44,
+        alignItems: 'center',
+        paddingHorizontal: 14,
+    },
 });

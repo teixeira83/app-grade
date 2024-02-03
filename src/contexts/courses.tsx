@@ -1,4 +1,10 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  ReactNode,
+} from 'react';
 import { Course } from '../types/course';
 import { ICoursesContext } from '../types/contexts/courses';
 import { CoursesController } from '../controllers/courses';
@@ -7,7 +13,7 @@ const CoursesContext = createContext<ICoursesContext>({
   userCourses: [],
   allCourses: [],
   addCourse: (course: Course) => {},
-  isUserCourse: (course: Course) => false,
+  isUserCourse: (courseId: string) => false,
   removeCourse: (course: Course) => {},
 });
 
@@ -21,31 +27,37 @@ const CoursesProvider: React.FC = ({ children }) => {
     const receivedCourses = await courseController.getCoursesFromApi();
     const storedCourses = await courseController.getCoursesFromStorage();
     const storedUserCourses =
-      await courseController.getUserCoursesFromStorage();
+        await courseController.getUserCoursesFromStorage();
 
     setUserCourses(storedUserCourses);
     setAllCourses(receivedCourses.length ? receivedCourses : storedCourses);
   };
 
   const addCourse = (course: Course) => {
+    const isCourseAlreadyAdd = !!userCourses.filter(
+        currentCourse => currentCourse.id === course.id,
+    ).length;
+
+    if (isCourseAlreadyAdd) return;
+
     setUserCourses(pv => [...pv, course]);
     courseController.addUserCourseToStorage(course);
   };
 
   const removeCourse = (courseToBeRemoved: Course) => {
     const usersCourseWithoutDeleted: Course[] = userCourses.filter(
-      course => course.id !== courseToBeRemoved.id,
+        course => course.id !== courseToBeRemoved.id,
     );
     setUserCourses(usersCourseWithoutDeleted);
     courseController.updateUserCourses(usersCourseWithoutDeleted);
   };
 
-  const isUserCourse = (course: Course): boolean => {
-    const userCourseFounded = userCourses.find(
-      currentCourse => currentCourse.id === course.id,
+  const isUserCourse = (courseId: string): boolean => {
+    const userCourseFounded = userCourses.filter(
+        currentCourse => currentCourse.id === courseId,
     );
 
-    return !!userCourseFounded;
+    return !!userCourseFounded.length;
   };
 
   useEffect(() => {
@@ -53,16 +65,16 @@ const CoursesProvider: React.FC = ({ children }) => {
   }, []);
 
   return (
-    <CoursesContext.Provider
-      value={{
-        userCourses,
-        allCourses,
-        addCourse,
-        removeCourse,
-        isUserCourse,
-      }}>
-      {children}
-    </CoursesContext.Provider>
+      <CoursesContext.Provider
+          value={{
+            userCourses,
+            allCourses,
+            addCourse,
+            removeCourse,
+            isUserCourse,
+          }}>
+        {children}
+      </CoursesContext.Provider>
   );
 };
 
