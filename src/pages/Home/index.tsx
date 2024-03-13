@@ -11,9 +11,9 @@ import {
 } from 'react-native';
 import {
   DropDownList,
-  SearchInputWithIcon,
   NoCourseToShow,
 } from '../../components';
+import SearchInputWithIcon from '../../components/SearchInputWithIcon';
 import { colors, globalStyles } from '../../settings/styles/global';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -23,7 +23,7 @@ import { Course, WeekDays } from '../../types/course';
 import { useContextCourses } from '../../contexts';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-export function Home(): JSX.Element {
+export default function Home(): JSX.Element {
   const { userCourses, allCourses, addCourse, removeCourse, isUserCourse } =
       useContextCourses();
   const [valueToSearch, setValueToSearch] = useState('');
