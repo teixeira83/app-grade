@@ -12,7 +12,9 @@ export function DropDownList({
 }: IDropDownList): JSX.Element {
   const AccordionListItem = ({ id, title, contents }: ContentContainer) => {
     const [expanded, setExpanded] = useState(false);
-
+    console.log(id,title, contents)
+    if(!contents) return
+    console.log(contents)
     return (
       <ListItem.Accordion
         key={`${id}${title}`}

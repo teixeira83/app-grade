@@ -6,8 +6,11 @@ class CoursesService {
 
   async get() {
     try {
-      return cursosMock.cursos;
-      const response = await api.get('/cursos');
+      const response = await api.get('/course');
+      console.log('response')
+      console.log(response.data)
+      console.log('response')
+      // return cursosMock.cursos;
       return response.data;
     } catch (err) {
       console.log(err);
