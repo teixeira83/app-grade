@@ -9,7 +9,7 @@ import { ISearchInputWithIcon } from '../../types/components/searchInputWithIcon
  * @param onSearch
  * @constructor
  */
-export function SearchInputWithIcon({
+export default function SearchInputWithIcon({
     value,
     onSearch,
     isOpen,
