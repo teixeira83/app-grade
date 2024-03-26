@@ -12,8 +12,15 @@ export function CourseClassDescription(): JSX.Element {
     useNavigation<
       NativeStackNavigationProp<IRoutes, 'CourseClassDescription'>
     >();
-  const { params } = useRoute<RouteProp<IRoutes, 'CourseClassDescription'>>();
-
+  const { params, key, name, path } = useRoute<RouteProp<IRoutes, 'CourseClassDescription'>>();
+  console.log('params')
+  console.log(params)
+  console.log('key')
+  console.log(key)
+  console.log('name')
+  console.log(name)
+  console.log('path')
+  console.log(path)
   return (
     <View>
       <Header
@@ -25,19 +32,25 @@ export function CourseClassDescription(): JSX.Element {
         <BoxInformationWithLabelAndIcon
           label="Sala:"
           icon="location-pin"
-          informationText="05 Bloco E"
+          informationText={params!.classroom}
         />
 
         <BoxInformationWithLabelAndIcon
           label="Professor:"
           icon="location-pin"
-          informationText="Fernando Carvalho"
+          informationText={params!.teacher.name}
         />
 
         <BoxInformationWithLabelAndIcon
-          label="Whatsapp da turma:"
+          label="Telefone do professor"
           icon="location-pin"
-          informationText="https://chatwhatsapp.com/invite/0928321"
+          informationText={params!.teacher.contacts.whatsapp}
+        />
+
+        <BoxInformationWithLabelAndIcon
+          label="Email do professor"
+          icon="email"
+          informationText={params!.teacher.contacts.email}
         />
       </View>
     </View>
