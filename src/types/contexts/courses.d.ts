@@ -6,6 +6,7 @@ interface ICoursesContext {
   addCourse: (Course) => void;
   removeCourse: (Course) => void;
   isUserCourse: (Course) => boolean;
+  isCoursesLoading: boolean;
 }
 
 export { ICoursesContext };

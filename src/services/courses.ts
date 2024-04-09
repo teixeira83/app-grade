@@ -1,16 +1,14 @@
 import api from './api';
-import cursosMock from '../cursosMock.json';
 
 class CoursesService {
   constructor() {}
 
   async get() {
     try {
-      return cursosMock.cursos;
-      const response = await api.get('/cursos');
+      const response = await api.get('/course');
       return response.data;
     } catch (err) {
-      console.log(err);
+      console.log({err});
       return [];
     }
   }

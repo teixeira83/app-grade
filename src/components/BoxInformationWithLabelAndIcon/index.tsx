@@ -7,15 +7,16 @@ export function BoxInformationWithLabelAndIcon({
   label,
   icon,
   informationText,
+  isAnLargeAreaText = false
 }: IBoxInformationWithLabelAndIcon): JSX.Element {
   return (
     <View style={styles.boxContainer}>
       <Text style={styles.labelText}>{label}</Text>
 
-      <View style={styles.informationContainer}>
+      <View style={isAnLargeAreaText ? styles.largeAreaText : styles.informationContainer}>
         <Icon name={icon} size={28} />
 
-        <Text style={styles.informationText}>{informationText}</Text>
+        <Text style={isAnLargeAreaText ? styles.informationTextWithLeftMargin : styles.informationText}>{informationText}</Text>
       </View>
     </View>
   );
@@ -43,4 +44,21 @@ const styles = StyleSheet.create({
   informationText: {
     fontSize: 16,
   },
+  informationTextWithLeftMargin: {
+    fontSize: 16,
+    marginLeft: 10,
+    marginTop: 5,
+  },
+  largeAreaText: {
+    paddingTop: 6,
+    height: 160,
+    width: '100%',
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    paddingHorizontal: 12,
+    marginTop: 10,
+  }
 });

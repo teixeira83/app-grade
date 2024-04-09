@@ -3,7 +3,7 @@ import { Routes } from './routes';
 import { AppProviders } from './contexts/providers';
 
 function App(): JSX.Element {
-  return (
+    return (
     <AppProviders>
       <Routes />
     </AppProviders>

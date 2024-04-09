@@ -11,7 +11,8 @@ export function DropDownList({
   containers,
 }: IDropDownList): JSX.Element {
   const AccordionListItem = ({ id, title, contents }: ContentContainer) => {
-    const [expanded, setExpanded] = useState(false);
+    const [expanded, setExpanded] =
+        useState(false);
 
     return (
       <ListItem.Accordion
@@ -28,14 +29,9 @@ export function DropDownList({
   return (
     <View>
       <Text style={styles.titleText}>{title}</Text>
-
-      <FlatList
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: 120 }}
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-        data={containers}
-        renderItem={({ item }) => <AccordionListItem {...item} />}
-      />
+      <View>
+        {containers.map((item) => <AccordionListItem key={item.id} {...item} />)}
+      </View>
     </View>
   );
 }

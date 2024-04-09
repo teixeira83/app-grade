@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://10.0.2.2:3000',
+  baseURL: 'https://grade-api.onrender.com/api/v1',
+  headers: {
+    "Content-type": "application/json",
+  }
 });
 
 export default api;

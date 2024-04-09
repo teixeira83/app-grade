@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import {
+  ActivityIndicator, FlatList,
   Keyboard,
   KeyboardAvoidingView,
-  Platform,
+  Platform, ScrollView,
   StyleSheet,
-  Text,
+  Text, TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
@@ -22,9 +23,10 @@ import { ContentContainer, IPeriodCard } from '../../types/components/dropDown';
 import { Course, WeekDays } from '../../types/course';
 import { useContextCourses } from '../../contexts';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Home(): JSX.Element {
-  const { userCourses, allCourses, addCourse, removeCourse, isUserCourse } =
+export function Home(): JSX.Element {
+  const { userCourses, allCourses, addCourse, removeCourse, isUserCourse, isCoursesLoading } =
       useContextCourses();
   const [valueToSearch, setValueToSearch] = useState('');
   const [isSearching, setIsSearching] = useState(false);
@@ -32,6 +34,8 @@ export default function Home(): JSX.Element {
 
   const navigation =
       useNavigation<NativeStackNavigationProp<IRoutes, 'Home'>>();
+
+  const [editable, setEditable] = useState(false);
 
   const onSearch = (text: string) => {
     setFilteredCourses(() =>
@@ -43,9 +47,6 @@ export default function Home(): JSX.Element {
     );
     setIsSearching(true);
     setValueToSearch(text);
-    if (!text) {
-      setIsSearching(false);
-    }
   };
 
   const onNavigateToWeekScheedule = (
@@ -128,62 +129,77 @@ export default function Home(): JSX.Element {
     setFilteredCourses(sortCoursesByName(allCourses));
   }, [allCourses, userCourses]);
 
+  useEffect(() => {
+    setEditable(true)
+  }, []);
+
   return (
-      <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={styles.container}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={{ flex: 1 }}>
-            <View style={styles.searchContainer}>
-              <SearchInputWithIcon
-                  value={valueToSearch ? valueToSearch : ''}
-                  onSearch={onSearch}
-                  isOpen={!!valueToSearch.length}
-                  onBlur={onBlurOnInputSearch}
-                  onFocus={() => setIsSearching(true)}
-              />
+      <ScrollView style={{ flex: 1, height: 500 }}>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.container}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={{ flex: 1 }}>
+              <View style={styles.searchContainer}>
+                <SearchInputWithIcon
+                    value={valueToSearch ? valueToSearch : ''}
+                    onSearch={onSearch}
+                    isOpen={!!valueToSearch.length}
+                    onBlur={onBlurOnInputSearch}
+                    onFocus={() => setIsSearching(true)}
+                    editable={editable}
+                />
 
-              {isSearching &&
-                  filteredCourses.map((course, index) => {
-                    return (
-                        <TouchableOpacity
-                            key={course.id}
-                            style={{ margin: 0, width: '100%' }}
-                            onPress={() => onSelectCourse(course)}>
-                          <View style={styles.lineSeparator} />
+                {isSearching &&
+                    filteredCourses.map((course, index) => {
+                      return (
+                          <TouchableOpacity
+                              key={course.id}
+                              style={{ margin: 0, width: '100%' }}
+                              onPress={() => onSelectCourse(course)}>
+                            <View style={styles.lineSeparator} />
 
-                          <View
-                              style={
-                                index + 1 === filteredCourses.length
-                                    ? styles.lastSearchContentContainer
-                                    : styles.searchContentContainer
-                              }>
-                            <Text>{course.name}</Text>
+                            <View
+                                style={
+                                  index + 1 === filteredCourses.length
+                                      ? styles.lastSearchContentContainer
+                                      : styles.searchContentContainer
+                                }>
+                              <Text>{course.name}</Text>
 
-                            {isUserCourse(course.id) ? (
-                                <Icon name="star" size={32} color="#E4C676" />
-                            ) : (
-                                <Icon name="star-outline" size={32} />
-                            )}
-                          </View>
-                        </TouchableOpacity>
-                    );
-                  })}
+                              {isUserCourse(course.id) ? (
+                                  <Icon name="star" size={32} color="#E4C676" />
+                              ) : (
+                                  <Icon name="star-outline" size={32} />
+                              )}
+                            </View>
+                          </TouchableOpacity>
+                      );
+                    })}
+              </View>
+
+              {isCoursesLoading ? (
+                  <View style={{ flex: 1, justifyContent: 'center'}}>
+                    <ActivityIndicator size={'large'} color={'black'}/>
+                  </View>
+              ) : (
+                  <View>
+                    {!!userCourses.length ? (
+                        <View style={globalStyles.bodyContainer}>
+                          <DropDownList
+                              title="SEUS CURSOS"
+                              containers={extractFormattedContainers(userCourses)}
+                          />
+                        </View>
+                    ) : (
+                        <NoCourseToShow />
+                    )}
+                  </View>
+              )}
             </View>
-
-            {!isSearching && !!userCourses.length && (
-                <View style={globalStyles.bodyContainer}>
-                  <DropDownList
-                      title="SEUS CURSOS"
-                      containers={extractFormattedContainers(userCourses)}
-                  />
-                </View>
-            )}
-
-            {!isSearching && !userCourses.length && <NoCourseToShow />}
-          </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </ScrollView>
   );
 }
 
@@ -200,7 +216,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   searchContainer: {
-    height: 80,
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',

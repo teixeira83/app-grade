@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 // import { useLanguage } from '../../hooks';
 import { DropDownList, Header } from '../../components';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -82,7 +82,7 @@ export function WeekSchedule(): JSX.Element {
   };
 
   return (
-    <>
+    <ScrollView style={{ flex: 1, height: 500 }}>
       <Header
         title={'Sistemas da Informação'}
         onGoBack={() => navigation.goBack()}
@@ -96,7 +96,7 @@ export function WeekSchedule(): JSX.Element {
           />
         )}
       </View>
-    </>
+    </ScrollView>
   );
 }
 

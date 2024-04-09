@@ -8,6 +8,7 @@ import React, {
 import { Course } from '../types/course';
 import { ICoursesContext } from '../types/contexts/courses';
 import { CoursesController } from '../controllers/courses';
+import {Alert} from 'react-native';
 
 const CoursesContext = createContext<ICoursesContext>({
   userCourses: [],
@@ -15,22 +16,31 @@ const CoursesContext = createContext<ICoursesContext>({
   addCourse: (course: Course) => {},
   isUserCourse: (courseId: string) => false,
   removeCourse: (course: Course) => {},
+  isCoursesLoading: false,
 });
 
 const courseController = new CoursesController();
 
-const CoursesProvider: React.FC = ({ children }) => {
+const CoursesProvider: React.FC<any> = ({ children }) => {
   const [userCourses, setUserCourses] = useState<Course[]>([]);
   const [allCourses, setAllCourses] = useState<Course[]>([]);
+  const [isCoursesLoading, setIsCoursesLoading] = useState(false);
 
   const InitialSyncCourses = async () => {
-    const receivedCourses = await courseController.getCoursesFromApi();
-    const storedCourses = await courseController.getCoursesFromStorage();
-    const storedUserCourses =
-        await courseController.getUserCoursesFromStorage();
+    try {
+      setIsCoursesLoading(true);
+      const receivedCourses = await courseController.getCoursesFromApi();
+      const storedCourses = await courseController.getCoursesFromStorage();
+      const storedUserCourses =
+          await courseController.getUserCoursesFromStorage();
 
-    setUserCourses(storedUserCourses);
-    setAllCourses(receivedCourses.length ? receivedCourses : storedCourses);
+      setUserCourses(storedUserCourses);
+      setAllCourses(receivedCourses.length ? receivedCourses : storedCourses);
+    } catch (error) {
+      Alert.alert('Erro ao tentar carregar cursos.')
+    } finally {
+      setIsCoursesLoading(false);
+    }
   };
 
   const addCourse = (course: Course) => {
@@ -72,6 +82,7 @@ const CoursesProvider: React.FC = ({ children }) => {
             addCourse,
             removeCourse,
             isUserCourse,
+            isCoursesLoading
           }}>
         {children}
       </CoursesContext.Provider>
